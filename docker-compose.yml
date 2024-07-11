@@ -47,6 +47,7 @@ services:
     image: neo4j:latest
     ports:
       - 7474:7474
+      - 7473:7473
       - 7687:7687
     networks:
       - net
@@ -55,6 +56,10 @@ services:
       - ./data:/data
       - ./import:/var/lib/neo4j/import
     environment:
+      - "NEO4J_dbms.ssl.policy.bolt.enabled=false"
+      - "NEO4J_server.https.enabled=false"
+      - "NEO4J_dbms_logs_http_enabled=true"
+      - "NEO4J_browser_allow__outgoing__connections=true"
       - "NEO4J_AUTH=neo4j/password1234"
       - "NEO4J_dbms_memory_heap_initial__size=4G"
       - "NEO4J_dbms_memory_pagecache_size=4G"
