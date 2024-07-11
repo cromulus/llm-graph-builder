@@ -43,8 +43,9 @@ services:
       - "8000:8000"
     networks:
       - net
-  neo4j:
+  db:
     image: neo4j:latest
+    name: db
     ports:
       - 7474:7474
       - 7687:7687
