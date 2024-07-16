@@ -15,6 +15,7 @@ services:
       - NEO4J_USERNAME=${NEO4J_USERNAME-neo4j}
       - OPENAI_API_KEY=${OPENAI_API_KEY-}
       - DIFFBOT_API_KEY=${DIFFBOT_API_KEY-}
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL-https://localhost:8000/v1}
       - EMBEDDING_MODEL=${EMBEDDING_MODEL-all-MiniLM-L6-v2}
       - LANGCHAIN_ENDPOINT=${LANGCHAIN_ENDPOINT-}
       - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2-}
@@ -40,7 +41,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     ports:
-      - "8000:8000"
+      - "8090:8000"
     networks:
       - net
   db:
@@ -76,7 +77,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - BACKEND_API_URL=${BACKEND_API_URL-http://localhost:8000}
+        - BACKEND_API_URL=${BACKEND_API_URL-http://localhost:8090}
         - REACT_APP_SOURCES=${REACT_APP_SOURCES-local,youtube,wiki,s3}
         - LLM_MODELS=${LLM_MODELS-diffbot,openai-gpt-3.5,openai-gpt-4o}
         - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID-""}
@@ -94,6 +95,12 @@ services:
       - "8080:8080"
     networks:
       - net
+  vllm:
+    image: vllm:latest
+    networks:
+      - net
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN-}
 
 networks:
   net:
