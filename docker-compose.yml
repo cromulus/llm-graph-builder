@@ -103,16 +103,12 @@ services:
       stack: 67108864
       memlock: -1
     environment:
-      - PORT=8000
-      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN-}
-      - MODEL_NAME=mistralai/Mixtral-8x22B-Instruct-v0.1
-      #- PROMPT_NAME=
-      #- MODEL_PATH=
-#     - EMBEDDING_NAME=checkpoints/bce-embedding-base_v1
+      - "PORT=8000"
+      - "HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN-}"
+      - "MODEL_NAME=mistralai/Mixtral-8x22B-Instruct-v0.1"
     volumes:
       # model path need to be specified if not in pwd
       - ./data/checkpoints:/vllm-workspace/checkpoints
-    environment:
 
 
 networks:
