@@ -42,10 +42,12 @@ def get_llm(model_version: str):
         )
     elif "openai" in model_version:
         model_name = MODEL_VERSIONS[model_version]
+        # if OPENAI_BASE_URL is set, use it, otherwise use default base url
         llm = ChatOpenAI(
             api_key=os.environ.get("OPENAI_API_KEY"),
             model=model_name,
             temperature=0,
+            base_url=os.environ.get("OPENAI_BASE_URL") or None,
         )
 
     elif "azure" in model_version:
