@@ -15,7 +15,7 @@ services:
       - NEO4J_USERNAME=${NEO4J_USERNAME-neo4j}
       - OPENAI_API_KEY=${OPENAI_API_KEY-}
       - DIFFBOT_API_KEY=${DIFFBOT_API_KEY-}
-      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL-https://localhost:8000/v1}
+      - OPENAI_API_BASE_URL=${OPENAI_API_BASE_URL-https://localhost:9000/v1}
       - EMBEDDING_MODEL=${EMBEDDING_MODEL-all-MiniLM-L6-v2}
       - LANGCHAIN_ENDPOINT=${LANGCHAIN_ENDPOINT-}
       - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2-}
@@ -95,17 +95,18 @@ services:
       - "8080:8080"
     networks:
       - net
-  vllm:
+  vllm: # perhaps just run the vllm container separately? https://docs.mistral.ai/deployment/self-deployment/vllm/
     image: vllm/vllm-openai:latest
+    runtime: nvidia  # Specifies the use of NVIDIA runtime
     networks:
       - net
     ulimits:
       stack: 67108864
       memlock: -1
     environment:
-      - "PORT=8000"
+      - "PORT=9000"
       - "HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN-}"
-      - "MODEL_NAME=mistralai/Mixtral-8x22B-Instruct-v0.1"
+      - "MODEL_NAME=gradientai/Llama-3-70B-Instruct-Gradient-262k"
     volumes:
       # model path need to be specified if not in pwd
       - ./data/checkpoints:/vllm-workspace/checkpoints
